@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "uuid": "^11.1.0"
+  },
+  "name": "keskonmange-backend",
+  "version": "1.0.0",
+  "description": "Backend de l'application keskonmange",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Synchroneyes/keskonmange.git"
+  },
+  "keywords": [
+    "nodejs",
+    "backend",
+    "js",
+    "api"
+  ],
+  "author": "Synchroneyes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Synchroneyes/keskonmange/issues"
+  },
+  "homepage": "https://github.com/Synchroneyes/keskonmange#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
