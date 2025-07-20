@@ -105,3 +105,10 @@ deployment-key*
 
 # Fichiers de configuration locale
 config.local.*
+
+# Docker
+logs/
+.env.docker.local
+
+# Volumes Docker
+docker-volumes/
