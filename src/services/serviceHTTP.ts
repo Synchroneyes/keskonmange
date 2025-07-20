@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '../config/api';
 
 // Types pour les réponses API
-export interface ReponseAPI<T = any> {
+export interface ReponseAPI<T = unknown> {
   success: boolean;
   data?: T;
   message?: string;
@@ -17,9 +17,9 @@ const getHeaders = (): HeadersInit => ({
 // Classe pour gérer les erreurs API
 export class ErreurAPI extends Error {
   public status: number;
-  public response?: any;
+  public response?: unknown;
 
-  constructor(message: string, status: number, response?: any) {
+  constructor(message: string, status: number, response?: unknown) {
     super(message);
     this.name = 'ErreurAPI';
     this.status = status;
@@ -67,7 +67,7 @@ export class ServiceHTTP {
   }
 
   // POST
-  async post<T>(endpoint: string, data?: any): Promise<ReponseAPI<T>> {
+  async post<T>(endpoint: string, data?: unknown): Promise<ReponseAPI<T>> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'POST',
       headers: getHeaders(),
@@ -78,7 +78,7 @@ export class ServiceHTTP {
   }
 
   // PUT
-  async put<T>(endpoint: string, data?: any): Promise<ReponseAPI<T>> {
+  async put<T>(endpoint: string, data?: unknown): Promise<ReponseAPI<T>> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'PUT',
       headers: getHeaders(),
@@ -99,7 +99,7 @@ export class ServiceHTTP {
   }
 
   // PATCH
-  async patch<T>(endpoint: string, data?: any): Promise<ReponseAPI<T>> {
+  async patch<T>(endpoint: string, data?: unknown): Promise<ReponseAPI<T>> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'PATCH',
       headers: getHeaders(),

@@ -80,7 +80,7 @@ export class ServiceVotes {
       );
       
       return response.data?.aVote || false;
-    } catch (error) {
+    } catch {
       // Si l'endpoint retourne 404, cela signifie que l'utilisateur n'a pas voté
       return false;
     }

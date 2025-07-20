@@ -19,12 +19,6 @@ export default function ModalDetailsVotes({
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (estOuvert && propositionId) {
-      chargerVotes();
-    }
-  }, [estOuvert, propositionId]);
-
   const chargerVotes = async () => {
     try {
       setChargement(true);
@@ -38,6 +32,12 @@ export default function ModalDetailsVotes({
       setChargement(false);
     }
   };
+
+  useEffect(() => {
+    if (estOuvert && propositionId) {
+      chargerVotes();
+    }
+  }, [estOuvert, propositionId, chargerVotes]);
 
   const votesPour = votes.filter(vote => vote.typeVote === 'pour');
   const votesContre = votes.filter(vote => vote.typeVote === 'contre');

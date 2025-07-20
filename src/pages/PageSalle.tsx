@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FormulaireConnexionSalleUnifie from '../components/FormulaireConnexionSalleUnifie';
 import FormulaireProposition from '../components/FormulaireProposition';
@@ -52,8 +52,55 @@ export default function PageSalle() {
     }
   }, [utilisateurActuel, salle]);
 
+  // Fonction pour charger les propositions d'une salle
+  const chargerPropositions = useCallback(async (salleId: string) => {
+    try {
+      const propositionsSalle = await servicePropositions.obtenirToutesPropositions(salleId);
+      setPropositions(propositionsSalle);
+    } catch (error) {
+      console.error('Erreur lors du chargement des propositions:', error);
+    }
+  }, []);
+
+  // Fonction pour connecter automatiquement un utilisateur (créateur ou participant)
+  const connecterUtilisateur = useCallback(async (nom: string, motDePasse: string, estCreateur: boolean = false) => {
+    if (!id) return;
+    
+    try {
+      setChargementConnexion(true);
+      
+      // Rejoindre la salle directement
+      const salle = await serviceSallesVote.rejoindreSalle(id, {
+        nomUtilisateur: nom,
+        motDePasse
+      });
+      
+      setSalle(salle);
+      setUtilisateurActuel(nom);
+      
+      // Charger les propositions
+      await chargerPropositions(id);
+      
+      // Afficher une notification de bienvenue appropriée
+      const message = estCreateur 
+        ? `Bienvenue dans votre salle "${salle.nomCreateur}" ! Vous pouvez maintenant proposer des restaurants.`
+        : `Bienvenue dans la salle "${salle.nomCreateur}" ! Vous pouvez maintenant proposer des restaurants et voter.`;
+      
+      setNotification({
+        message,
+        type: 'success'
+      });
+      
+    } catch (error) {
+      console.error('Erreur lors de la connexion automatique:', error);
+      setErreurConnexion('Erreur lors de la connexion automatique. Veuillez vous connecter manuellement.');
+    } finally {
+      setChargementConnexion(false);
+    }
+  }, [id, chargerPropositions]);
+
   // Fonction pour vérifier si l'utilisateur est le créateur
-  const verifierCreateur = () => {
+  const verifierCreateur = useCallback(() => {
     try {
       // Vérifier d'abord les informations du créateur
       const creatorInfoStr = sessionStorage.getItem('creatorInfo');
@@ -93,54 +140,7 @@ export default function PageSalle() {
     } catch (error) {
       console.error('Erreur lors de la vérification des informations de connexion:', error);
     }
-  };
-
-  // Fonction pour connecter automatiquement un utilisateur (créateur ou participant)
-  const connecterUtilisateur = async (nom: string, motDePasse: string, estCreateur: boolean = false) => {
-    if (!id) return;
-    
-    try {
-      setChargementConnexion(true);
-      
-      // Rejoindre la salle directement
-      const salle = await serviceSallesVote.rejoindreSalle(id, {
-        nomUtilisateur: nom,
-        motDePasse
-      });
-      
-      setSalle(salle);
-      setUtilisateurActuel(nom);
-      
-      // Charger les propositions
-      await chargerPropositions(id);
-      
-      // Afficher une notification de bienvenue appropriée
-      const message = estCreateur 
-        ? `Bienvenue dans votre salle "${salle.nomCreateur}" ! Vous pouvez maintenant proposer des restaurants.`
-        : `Bienvenue dans la salle "${salle.nomCreateur}" ! Vous pouvez maintenant proposer des restaurants et voter.`;
-      
-      setNotification({
-        message,
-        type: 'success'
-      });
-      
-    } catch (error) {
-      console.error('Erreur lors de la connexion automatique:', error);
-      setErreurConnexion('Erreur lors de la connexion automatique. Veuillez vous connecter manuellement.');
-    } finally {
-      setChargementConnexion(false);
-    }
-  };
-
-  // Fonction pour charger les propositions d'une salle
-  const chargerPropositions = async (salleId: string) => {
-    try {
-      const propositionsSalle = await servicePropositions.obtenirToutesPropositions(salleId);
-      setPropositions(propositionsSalle);
-    } catch (error) {
-      console.error('Erreur lors du chargement des propositions:', error);
-    }
-  };
+  }, [id, connecterUtilisateur]);
 
   // Fonction pour ajouter une proposition
   const gererAjoutProposition = async (donnees: AjouterPropositionRequest) => {
