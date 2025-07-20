@@ -1,6 +1,10 @@
 # 🚀 Guide de déploiement KESKONMANGE
 
-## Configuration GitHub Pages
+## Configuration GitHub Pages avec domaine personnalisé
+
+### Domaine configuré
+L'application sera disponible sur : **https://keskonmange.monvoisin-kevin.fr**
+L'API backend sera disponible sur : **https://api.keskonmange.monvoisin-kevin.fr**
 
 ### Étapes pour activer GitHub Pages
 
@@ -11,8 +15,21 @@
 2. **Configurez GitHub Pages**
    - Dans le menu latéral, cliquez sur **Pages**
    - Dans la section **Source**, sélectionnez **GitHub Actions**
+   - Le domaine personnalisé sera automatiquement détecté via le fichier CNAME
 
-3. **Vérifiez les permissions**
+3. **Configuration DNS requise**
+   
+   Pour le frontend :
+   - **Type** : CNAME
+   - **Nom** : `keskonmange`
+   - **Valeur** : `synchroneyes.github.io`
+   
+   Pour l'API backend (à configurer sur votre serveur) :
+   - **Type** : A ou CNAME selon votre hébergement
+   - **Nom** : `api.keskonmange`
+   - **Valeur** : IP de votre serveur backend
+
+4. **Vérifiez les permissions**
    - Allez dans **Settings** > **Actions** > **General**
    - Dans **Workflow permissions**, assurez-vous que les permissions de lecture/écriture sont activées
 
