@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>KESKONMANGE - Redirection</title>
+    <script type="text/javascript">
+      // GitHub Pages SPA redirect hack
+      // Redirige toutes les routes vers index.html avec le chemin dans le paramètre 'p'
+      var pathSegments = window.location.pathname.split('/').filter(function(segment) {
+        return segment !== '';
+      });
+      
+      var redirect = window.location.origin + '/?p=/' + pathSegments.join('/');
+      
+      if (window.location.search) {
+        redirect += '&' + window.location.search.slice(1);
+      }
+      
+      window.location.replace(redirect);
+    </script>
+  </head>
+  <body>
+    <p>Redirection en cours...</p>
+  </body>
+</html>
